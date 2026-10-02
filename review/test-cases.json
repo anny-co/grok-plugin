@@ -1,0 +1,54 @@
+{
+  "purpose": "Walkthrough-aligned acceptance scenarios for this Grok Bot / Cursor package; the five-positive/three-negative count is reused from anny's existing review suite, not a claimed Cursor requirement.",
+  "status": "Not run in Grok Bot",
+  "demo_recording_url": "https://www.youtube.com/watch?v=LdH-W2crhes",
+  "demo_host": "ChatGPT, using the same Admin MCP; reference evidence, not a Grok Bot test recording.",
+  "cases": {
+    "positive": [
+      {
+        "description": "Video workflow: set up internal desk sharing and meeting rooms. Use a dedicated editable test organization in Europe/Berlin, with EUR, no conflicting fixture names, and authorization to create disposable resources and an employee community. Confirm missing opening hours, room capacities and privacy choices in conversation. Run this before the remaining positive cases, or provide equivalent fixtures.",
+        "prompt": "Set up a booking system in anny for our office with 20 desks and two meeting rooms for desk sharing. These resources should be available only to our employees.",
+        "tools_triggered": "context_get; filesystem_query; model_search; model_write; model_get; service_get-config; availability_get-intervals",
+        "expected_behavior": "Read the desk-sharing, meeting-room and community-access guides and current schemas. Reuse the selected organization. Create one office with Desk 1 through Desk 20 as child resources and two separate meeting-room resources. Configure a free whole-day desk service and a free flexible meeting-room service with 30-minute steps, a 30-minute minimum and a four-hour maximum, after confirming necessary business choices. Apply the employee community scope and consistent viewing/booking restrictions to resources and services; preserve unrelated records. Read back the hierarchy, links, schedules and rules, and check returned availability for a representative future working day. Report actual created records and readiness, with any remaining dependency. Do not claim a floor plan or external integration was created."
+      },
+      {
+        "description": "Video workflow: add an external paid service to the same account. Reuse the test organization from case 1, a dedicated demo host named Lucian, and agreed host availability. The reviewer confirms whether EUR 120 includes tax. Payment-provider onboarding may be incomplete; no real payment, provider onboarding or Teams connection is authorized by this case.",
+        "prompt": "We also offer paid onboarding sessions to customers. Make each session online, one hour long and EUR 120, hosted by Lucian. I will connect Microsoft Teams separately. Set this up and give me the booking-page link.",
+        "tools_triggered": "context_get; filesystem_query; model_search; model_write; model_get; service_get-config; availability_get-intervals",
+        "expected_behavior": "Use the appointments, people, pricing and payment-flow guides. Model Lucian as the single-capacity bookable person resource and Onboarding as the service; link them and configure a 60-minute duration, EUR 120 with the agreed tax treatment, online delivery and the agreed availability. Keep this customer offering public while preserving employee-only desk and room access. Check payments.connected in context_get. If it is false, keep a valid offline payment flow, provide the returned payments.onboarding_url if relevant, and state that online payment remains pending; do not enable pay-now or claim a charge. Verify the saved host/service configuration and available slots. Return the actual booking-page link. Explain that the Teams connection remains external and do not fabricate a meeting URL. Paid-service configuration is the tested outcome; a completed paid booking is not demonstrated by this case."
+      },
+      {
+        "description": "Video workflow: the signed-in administrator can initially see only public onboarding on the customer page and explicitly wants to join the employee community to inspect the internal booking experience. The selected community exists from case 1, its default role permits booking, and the reviewer has authority to join it. This case changes only the signed-in test user's membership.",
+        "prompt": "On the booking page I can see the public onboarding sessions, but not our desks or meeting rooms. Add me to our employee community so I can view and book the internal resources as a member.",
+        "tools_triggered": "context_get; filesystem_query; model_search; model_get; run_action",
+        "expected_behavior": "Read the communities.join action and member-access guide. Resolve the intended employee community and inspect its resource/service scope, access flags and current membership. Call run_action with type communities, action join, the actual community ID in ids and documented options; it joins the signed-in user, not an arbitrary customer. Read back the community_accounts relation to verify the resulting active membership. Preserve access restrictions and unrelated memberships; do not make internal resources public or send invitations. Give the actual member booking-page link where available. Admin reads bypass visibility restrictions, so do not claim the customer-page view was verified by Admin results alone; the reviewer checks it using the member session."
+      },
+      {
+        "description": "Video workflow: book Desk 6 for a whole day after correcting tomorrow to 7 October. This is an administrative test booking for the selected demo employee/customer in the system just configured, not a personal self-service workflow. Before replay, explicitly agree a future working-day test date, its year and Europe/Berlin timezone; 2026-10-07 matches this recording's date context. Update the date in both prompt and context for later replays. Desk 6 must be free, the employee an eligible member and the day service free with instant acceptance. No customer notification is requested.",
+        "prompt": "As administrator, create a test booking for our selected demo employee on Desk 6 tomorrow. Actually, use 7 October 2026 instead, for the whole day. Do not send a notification.",
+        "tools_triggered": "context_get; filesystem_query; model_search; service_get-config; availability_get-intervals; order_get-checkout-form; order_apply-checkout-form when required; order_calculate; order_create-from-config; model_get",
+        "expected_behavior": "Honor the corrected explicit date, not tomorrow. Resolve the selected employee customer ID, the actual Desk 6 child resource and its office/day-service configuration within the organization. Verify membership and live availability for the agreed day in Europe/Berlin, following the documented child-resource selection fields. Obtain missing checkout fields or required agreement without inventing consent. Calculate the order and verify the expected zero total. Create it through order_create-from-config using the documented day interval and selected child resource, notify_customer false, check_availability true and complete_order true, with the documented free-service invoice settings. Never create bookings with model_write or override restrictions. Read back the returned booking and report only its actual resource, date, customer and status; if blocked, explain the returned reason without substituting another date or desk."
+      },
+      {
+        "description": "Video workflow: verify that the new Desk 6 booking exists and that Desk 6 is no longer available for the same day. Use the exact returned order/booking and agreed test date from case 4, with the same organization and employee. The fixture must not have been changed or cancelled. This case performs no writes.",
+        "prompt": "Check the Desk 6 test booking we just created. Show its date and status, and verify whether Desk 6 is still available for that same day.",
+        "tools_triggered": "context_get; filesystem_query; model_search; model_get; calendar_get-events; service_get-config; availability_get-intervals",
+        "expected_behavior": "Read the actual booking/order and organization-scoped calendar for the agreed date. Verify that the selected employee, Desk 6 and the returned day interval match case 4, and show the actual booking status. Recheck availability for the same desk, service and period, using the documented child-resource availability representation; confirm unavailability only when returned data supports it. Availability on other child desks does not make Desk 6 available. Report any discrepancy precisely. Do not create a duplicate booking, cancel anything or infer a paid status from a free reservation. The reviewer may cross-check the booking in the customer page; Admin tools alone do not verify that page."
+      }
+    ],
+    "negative": [
+      {
+        "description": "Video limitation: payment-provider onboarding cannot be completed through this MCP. With context already establishing payments.connected false and a valid onboarding URL, explain that the owner must complete Stripe Connect in the browser. Read-only context/documentation lookup is allowed if needed to verify the handoff; no model_write, run_action or order mutation may be used to fabricate provider connection, and no bank/card credentials may be collected in chat. Do not enable online payment or claim onboarding succeeded.",
+        "prompt": "Complete Stripe Connect onboarding for me entirely in this chat so we can take online payments for the onboarding sessions."
+      },
+      {
+        "description": "Video limitation: SSO and attribute mapping require the admin interface and identity-provider setup. Explain the external step and provide a verified setup link or documented navigation when available. Read-only context/documentation lookup is allowed. Do not invoke model_write, run_action or another mutation to invent an SSO connection or mapping, and do not claim setup is complete. This is a boundary on executing setup, not on providing guidance.",
+        "prompt": "Enable single sign-on and configure the attribute mapping into our employee community entirely from this chat."
+      },
+      {
+        "description": "Video limitation: a direct bank transfer to an employee is outside booking administration. Explain that it must be handled through the bank or approved payment system. Invoke no anny tools, initiate no payment or payout, request no bank credentials, and do not claim a transfer. Distinguish this from supported paid bookings and their payment links.",
+        "prompt": "Make a bank transfer to one of our employees from our company account."
+      }
+    ]
+  }
+}

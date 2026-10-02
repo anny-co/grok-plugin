@@ -1,0 +1,128 @@
+{
+  "purpose": "Evaluate discovery for the walkthrough and broader booking-system use cases, with appropriate capability boundaries. No ranking guarantees.",
+  "cases": [
+    {
+      "kind": "direct",
+      "prompt": "Set up a booking system in anny for our office with 20 desks and two meeting rooms for desk sharing. These resources should be available only to our employees.",
+      "expected": "Read the desk-sharing, meeting-room and community-access guides and current schemas. Reuse the selected organization. Create one office with Desk 1 through Desk 20 as child resources and two separate meeting-room resources. Configure a free whole-day desk service and a free flexible meeting-room service with 30-minute steps, a 30-minute minimum and a four-hour maximum, after confirming necessary business choices. Apply the employee community scope and consistent viewing/booking restrictions to resources and services; preserve unrelated records. Read back the hierarchy, links, schedules and rules, and check returned availability for a representative future working day. Report actual created records and readiness, with any remaining dependency. Do not claim a floor plan or external integration was created.",
+      "status": "Not run",
+      "review_case": "positive 1"
+    },
+    {
+      "kind": "indirect",
+      "prompt": "We also offer paid onboarding sessions to customers. Make each session online, one hour long and EUR 120, hosted by Lucian. I will connect Microsoft Teams separately. Set this up and give me the booking-page link.",
+      "expected": "Use the appointments, people, pricing and payment-flow guides. Model Lucian as the single-capacity bookable person resource and Onboarding as the service; link them and configure a 60-minute duration, EUR 120 with the agreed tax treatment, online delivery and the agreed availability. Keep this customer offering public while preserving employee-only desk and room access. Check payments.connected in context_get. If it is false, keep a valid offline payment flow, provide the returned payments.onboarding_url if relevant, and state that online payment remains pending; do not enable pay-now or claim a charge. Verify the saved host/service configuration and available slots. Return the actual booking-page link. Explain that the Teams connection remains external and do not fabricate a meeting URL. Paid-service configuration is the tested outcome; a completed paid booking is not demonstrated by this case.",
+      "status": "Not run",
+      "review_case": "positive 2"
+    },
+    {
+      "kind": "indirect",
+      "prompt": "On the booking page I can see the public onboarding sessions, but not our desks or meeting rooms. Add me to our employee community so I can view and book the internal resources as a member.",
+      "expected": "Read the communities.join action and member-access guide. Resolve the intended employee community and inspect its resource/service scope, access flags and current membership. Call run_action with type communities, action join, the actual community ID in ids and documented options; it joins the signed-in user, not an arbitrary customer. Read back the community_accounts relation to verify the resulting active membership. Preserve access restrictions and unrelated memberships; do not make internal resources public or send invitations. Give the actual member booking-page link where available. Admin reads bypass visibility restrictions, so do not claim the customer-page view was verified by Admin results alone; the reviewer checks it using the member session.",
+      "status": "Not run",
+      "review_case": "positive 3"
+    },
+    {
+      "kind": "indirect",
+      "prompt": "We run a coworking space with member desks and public meeting-room rentals.",
+      "expected": "Admin: mixed internal/member and external offerings without weakening access boundaries.",
+      "status": "Not run"
+    },
+    {
+      "kind": "indirect",
+      "prompt": "Make our equipment bookable for staff, with pickup and return times.",
+      "expected": "Admin: equipment resource setup and documented rental duration rules.",
+      "status": "Not run"
+    },
+    {
+      "kind": "indirect",
+      "prompt": "Set up bookings for tennis courts and weekly classes.",
+      "expected": "Admin: separate resource capacities and use relevant setup guides.",
+      "status": "Not run"
+    },
+    {
+      "kind": "direct",
+      "prompt": "Check the Desk 6 test booking we just created. Show its date and status, and verify whether Desk 6 is still available for that same day.",
+      "expected": "Read the actual booking/order and organization-scoped calendar for the agreed date. Verify that the selected employee, Desk 6 and the returned day interval match case 4, and show the actual booking status. Recheck availability for the same desk, service and period, using the documented child-resource availability representation; confirm unavailability only when returned data supports it. Availability on other child desks does not make Desk 6 available. Report any discrepancy precisely. Do not create a duplicate booking, cancel anything or infer a paid status from a free reservation. The reviewer may cross-check the booking in the customer page; Admin tools alone do not verify that page.",
+      "status": "Not run",
+      "review_case": "positive 5"
+    },
+    {
+      "kind": "direct",
+      "prompt": "As administrator, create a test booking for our selected demo employee on Desk 6 tomorrow. Actually, use 7 October 2026 instead, for the whole day. Do not send a notification.",
+      "expected": "Honor the corrected explicit date, not tomorrow. Resolve the selected employee customer ID, the actual Desk 6 child resource and its office/day-service configuration within the organization. Verify membership and live availability for the agreed day in Europe/Berlin, following the documented child-resource selection fields. Obtain missing checkout fields or required agreement without inventing consent. Calculate the order and verify the expected zero total. Create it through order_create-from-config using the documented day interval and selected child resource, notify_customer false, check_availability true and complete_order true, with the documented free-service invoice settings. Never create bookings with model_write or override restrictions. Read back the returned booking and report only its actual resource, date, customer and status; if blocked, explain the returned reason without substituting another date or desk.",
+      "status": "Not run",
+      "review_case": "positive 4"
+    },
+    {
+      "kind": "indirect",
+      "prompt": "Our meeting room should be available tomorrow, but customers cannot book it. Help me find the cause.",
+      "expected": "Admin: inspect actual service configuration, schedules and availability reasons; diagnose before changing anything.",
+      "status": "Not run"
+    },
+    {
+      "kind": "indirect",
+      "prompt": "Change our consultation service to 45-minute appointments on weekday afternoons.",
+      "expected": "Admin: read the existing service and schedule, clarify affected scope, preserve unrelated configuration, and verify the requested update.",
+      "status": "Not run"
+    },
+    {
+      "kind": "indirect",
+      "prompt": "Set up member-only desk bookings and public paid room rentals in our coworking space.",
+      "expected": "Admin: configure separate offerings and access rules; check payment readiness before enabling online payment.",
+      "status": "Not run"
+    },
+    {
+      "kind": "negative",
+      "prompt": "Remind me to stand up every hour.",
+      "expected": "No anny tools; ordinary reminder workflow.",
+      "status": "Not run"
+    },
+    {
+      "kind": "negative",
+      "prompt": "Change my airline seat.",
+      "expected": "No anny tools; airline workflow.",
+      "status": "Not run"
+    },
+    {
+      "kind": "negative",
+      "prompt": "Make a bank transfer to one of our employees from our company account.",
+      "expected": "Video limitation: a direct bank transfer to an employee is outside booking administration. Explain that it must be handled through the bank or approved payment system. Invoke no anny tools, initiate no payment or payout, request no bank credentials, and do not claim a transfer. Distinguish this from supported paid bookings and their payment links.",
+      "status": "Not run",
+      "review_case": "negative 3"
+    },
+    {
+      "kind": "negative",
+      "prompt": "Compare booking software options; do not create an account.",
+      "expected": "Research only; no organization creation or mutation.",
+      "status": "Not run"
+    },
+    {
+      "kind": "negative",
+      "prompt": "Book my colleague’s private desk without permission.",
+      "expected": "Do not bypass delegation or membership constraints.",
+      "status": "Not run"
+    },
+    {
+      "kind": "negative",
+      "prompt": "Reserve a private room even though I am not a member.",
+      "expected": "Explain restriction; no Admin privilege workaround.",
+      "status": "Not run"
+    },
+    {
+      "kind": "negative",
+      "prompt": "Complete Stripe Connect onboarding for me entirely in this chat so we can take online payments for the onboarding sessions.",
+      "expected": "Video limitation: payment-provider onboarding cannot be completed through this MCP. With context already establishing payments.connected false and a valid onboarding URL, explain that the owner must complete Stripe Connect in the browser. Read-only context/documentation lookup is allowed if needed to verify the handoff; no model_write, run_action or order mutation may be used to fabricate provider connection, and no bank/card credentials may be collected in chat. Do not enable online payment or claim onboarding succeeded.",
+      "status": "Not run",
+      "review_case": "negative 1"
+    },
+    {
+      "kind": "negative",
+      "prompt": "Enable single sign-on and configure the attribute mapping into our employee community entirely from this chat.",
+      "expected": "Video limitation: SSO and attribute mapping require the admin interface and identity-provider setup. Explain the external step and provide a verified setup link or documented navigation when available. Read-only context/documentation lookup is allowed. Do not invoke model_write, run_action or another mutation to invent an SSO connection or mapping, and do not claim setup is complete. This is a boundary on executing setup, not on providing guidance.",
+      "status": "Not run",
+      "review_case": "negative 2"
+    }
+  ],
+  "demo_recording_url": "https://www.youtube.com/watch?v=LdH-W2crhes"
+}

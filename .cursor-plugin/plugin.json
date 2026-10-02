@@ -1,0 +1,25 @@
+{
+  "name": "anny",
+  "displayName": "anny — Booking System",
+  "version": "0.1.0",
+  "description": "Create a custom booking system in chat and manage booking operations end to end. Set up desk sharing, workspaces, meeting rooms, appointments, rentals, and free or paid service bookings for employees and customers with anny.",
+  "author": {
+    "name": "anny GmbH"
+  },
+  "homepage": "https://anny.co/en/",
+  "repository": "https://github.com/anny-co/grok-plugin",
+  "keywords": [
+    "anny",
+    "booking system",
+    "desk sharing",
+    "workspace management",
+    "meeting room booking",
+    "appointment scheduling",
+    "resource booking",
+    "paid service bookings",
+    "booking operations"
+  ],
+  "logo": "assets/anny-app-nacht-1024.png",
+  "skills": "skills/",
+  "mcpServers": "mcp.json"
+}

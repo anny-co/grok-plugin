@@ -8,7 +8,7 @@
   "reference_video_host": "ChatGPT",
   "marketplace_submission": "Not submitted",
   "publisher_terms": "Not accepted",
-  "public_repository": "Pending",
-  "browser_form": "Pending",
+  "public_repository": "Created at https://github.com/anny-co/grok-plugin as private; public visibility awaits the publisher's explicit authorization.",
+  "browser_form": "Filled and visually verified at https://cursor.com/marketplace/publish; Submit Application remains unclicked. The form uses the signed-in individual Cursor owner.",
   "validation_note": "Cursor validator noted that hooks/hooks.json is absent; hooks are optional and this plugin intentionally has none."
 }
